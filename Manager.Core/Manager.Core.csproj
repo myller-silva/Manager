@@ -6,8 +6,4 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
-    <ItemGroup>
-      <PackageReference Include="fluentvalidation" Version="11.4.0" />
-    </ItemGroup>
-
 </Project>
