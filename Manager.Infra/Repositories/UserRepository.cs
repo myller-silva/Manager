@@ -15,7 +15,8 @@ public class UserRepository : BaseRepository<User>, IUserRepository // o balta n
 
     public async Task<User> GetByEmail(string email)
     {
-        var user = await _context.Set<User>()
+        // var user = await _context.Set<User>() pq ta errado? é pq sempre cria uma nova tabela?
+            var user = await _context.Users 
             .Where(x => x.Email.ToLower() == email.ToLower())
             .AsNoTracking()
             .ToListAsync();
@@ -25,7 +26,7 @@ public class UserRepository : BaseRepository<User>, IUserRepository // o balta n
 
     public async Task<List<User>> SearchByEmail(string email)
     {
-        var users = await _context.Set<User>()
+        var users = await _context.Users
             .Where(x => x.Email.ToLower().Contains(email.ToLower()))
             .AsNoTracking()
             .ToListAsync();
@@ -34,7 +35,7 @@ public class UserRepository : BaseRepository<User>, IUserRepository // o balta n
 
     public Task<List<User>> SearchByName(string name)
     {
-        var users = _context.Set<User>()
+        var users = _context.Users
             .Where(
                 x => x.Name.ToLower().Contains(name)
             )
