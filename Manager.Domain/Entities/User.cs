@@ -1,3 +1,4 @@
+using Manager.Core.Exceptions;
 using Manager.Domain.Validators;
 // using   System.Collections.Generic;
 
@@ -33,7 +34,7 @@ public class User : Base
                 _erros.Add(error.ErrorMessage);
             }
 
-            throw new Exception("Alguns campos estao invalidos. "+_erros[0]);
+            throw new DomainException("Alguns campos estao invalidos. ", _erros);
         }
 
         return true;

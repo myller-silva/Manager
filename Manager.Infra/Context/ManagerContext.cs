@@ -13,10 +13,23 @@ public class ManagerContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        var database_name = "NameDB";
-        optionsBuilder.UseSqlServer(
-        @"Data Source=DESKTOP-652APCE\SQLEXPRESS;Initial Catalog="+database_name+";Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"
-            );
+        var myServerAddress = "TARDIS";
+        var myDataBase = "usermanagerapi";
+        // var myUsername = @"TARDIS\mylle";
+        // var myPassword = "5213";  
+        
+        // var str = @"Data Source=DESKTOP-652APCE\SQLEXPRESS;Initial Catalog=" + myDataBase + ";Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+        var str = @"Data Source="+myServerAddress+
+                  ";Initial Catalog="+myDataBase+ 
+                  ";Integrated Security=True;"+
+                  "Connect Timeout=30;"+
+                  "Encrypt=False;"+
+                  "TrustServerCertificate=False;"+
+                  "ApplicationIntent=ReadWrite;"+
+                  "MultiSubnetFailover=False";
+        
+        
+        optionsBuilder.UseSqlServer(str);
     }
     public virtual DbSet<User> Users {  get; set; }
 

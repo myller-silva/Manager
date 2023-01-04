@@ -1,0 +1,12 @@
+Primero:
+    entre no projeto no qual quer adicionar a migration.
+
+Segundo, rode o comando:
+    dotnet ef migrations add "NomeDaMigration"
+
+obs:
+    o projeto precisa estar buildando corretamente 
+    para conseguir fazer a migration.
+
+
+    
