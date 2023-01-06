@@ -8,6 +8,14 @@
 
     <ItemGroup>
       <PackageReference Include="AutoMapper" Version="12.0.0" />
+      <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+      <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.4.0" />
+      <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.4.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Manager.Domain\Manager.Domain.csproj" />
+      <ProjectReference Include="..\Manager.Services\Manager.Services.csproj" />
     </ItemGroup>
 
 </Project>

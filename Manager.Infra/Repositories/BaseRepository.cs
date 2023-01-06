@@ -1,3 +1,4 @@
+using Manager.Core.Exceptions;
 using Manager.Domain.Entities;
 using Manager.Infra.Context; 
 using Manager.Infra.Interfaces;
@@ -41,6 +42,10 @@ public class BaseRepository<T> : IBaseRepository<T> where T:Base
             _context.Remove(obj);
             await _context.SaveChangesAsync();
         }
+        // else
+        // {
+        //     throw new DomainException("Usuario não existe");
+        // }
     }
 
 
