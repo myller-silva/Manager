@@ -1,13 +1,17 @@
 using AutoMapper;
+using Manager.Services.DTO;
 using Manager.API.Utilities;
 using Manager.API.ViewModels;
 using Manager.Core.Exceptions;
-using Manager.Domain.Entities;
-using Manager.Services.DTO;
-using Manager.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Manager.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
+// using Manager.Domain.Entities;
 
 namespace Manager.API.Controllers;
+
+
+
 
 [ApiController]
 [Route("api/[controller]/[action]")]
@@ -17,12 +21,16 @@ public class UserController : ControllerBase // pesquisar sobre controllers e so
     private readonly IUserService _userService;
     private readonly IMapper _mapper; //pesquisar sobre AutoMapper e o IMapper
 
+    
     public UserController(IUserService userService, IMapper mapper)
     {
         _userService = userService;
         _mapper = mapper;
     }  
+    
+    
     [HttpPost]
+    [Authorize]
     // [Route("/api/v1/users/create")]
     // public async Task<IActionResult<List<User>>> Create([FromBody]CreateUserViewModel userViewModel)
     public async Task<ActionResult> Create([FromBody]CreateUserViewModel userViewModel)
@@ -50,7 +58,9 @@ public class UserController : ControllerBase // pesquisar sobre controllers e so
         } 
     }
 
+    
     [HttpPut]
+    [Authorize]
     public async Task<IActionResult> Update(UpdateUserViewModel userViewModel)
     {
         try
@@ -71,7 +81,9 @@ public class UserController : ControllerBase // pesquisar sobre controllers e so
         }
     }
 
+    
     [HttpDelete("{id}")]
+    [Authorize]
     public async Task<IActionResult> Delete(long id)
     {
         try
@@ -92,7 +104,8 @@ public class UserController : ControllerBase // pesquisar sobre controllers e so
     
     
     [HttpGet("{id}")]
-    public async Task<ActionResult> Get(long id)
+    [Authorize]
+    public async Task<ActionResult> GetById(long id)
     {
         try
         {
@@ -116,51 +129,113 @@ public class UserController : ControllerBase // pesquisar sobre controllers e so
         }
     }
 
-
-
-    // [HttpGet]
-    // public async Task<ActionResult<CreateUserViewModel>> Get()
-    // {
-    //     var usersDto = await _userService.Get();
-    //     // var usersCreated = 
-    //     return Ok(usersDto);
-    // }
-    //
-    // [HttpGet]
-    // public async Task<ActionResult<CreateUserViewModel>> GetByEmail(string email)
-    // {
-    //     try
-    //     {
-    //         var userDto = await _userService.GetByEmail(email);
-    //         if (userDto != null)
-    //         {
-    //             return Ok(new ResultViewModel
-    //             {
-    //                 Message = "Usuario encontrado",
-    //                 Success = true,
-    //                 Data = userDto
-    //             });
-    //         }
-    //         else
-    //         {
-    //             return NotFound(new ResultViewModel
-    //             {
-    //                 Message = "Usuario não encontrado",
-    //                 Success = false,
-    //                 Data = null
-    //             });
-    //             
-    //         }
-    //     }
-    //     catch (DomainException e)
-    //     {
-    //         return BadRequest(Responses.DomainErrorMessage(e.Message, e.Errors));
-    //     }
-    //     catch (Exception e)
-    //     {
-    //         return StatusCode(500, Responses.ApplicationErrorMessage());            
-    //     }
-    //     
-    // }
+    
+    [HttpGet("{email}")]
+    [Authorize]
+    public async Task<ActionResult> GetByEmail(string email)
+    {
+        try
+        {
+            var user = await _userService.GetByEmail(email);
+            if (user != null)
+            {
+                return Ok(Responses.AplicationOkMessage("Usuario encontrado.", user));
+            }
+            else
+            {
+                return BadRequest(Responses.ApplicationErrorMessage("Usuario não encontrado", null));
+            }
+        }
+        catch (DomainException e)
+        {
+            return BadRequest(Responses.DomainErrorMessage(e.Message));
+        }
+        catch (Exception e)
+        {
+            return StatusCode(500, e.Message);
+        }
+    }
+    
+    
+    [HttpGet]
+    [Authorize]
+    public async Task<ActionResult> GetAll()
+    {
+        try
+        {
+            var users = await _userService.Get();
+            if (users != null)
+            {
+                return Ok(Responses.AplicationOkMessage("Usuarios encontrados.", users));
+            }
+            else
+            {
+                return BadRequest(Responses.ApplicationErrorMessage("Nenhum usuario encontrado", users));
+            }
+        }
+        catch (DomainException e)
+        {
+            return BadRequest(Responses.DomainErrorMessage(e.Message));
+        }
+        catch (Exception e)
+        {
+            return StatusCode(500, e.Message);
+        }
+    }
+    
+    
+    [HttpGet("{email}")]
+    [Authorize]
+    [Authorize]
+    public async Task<ActionResult> SearchByEmail(string email)
+    {
+        try
+        {
+            var users = await _userService.SearchByEmail(email);
+            if (users != null)
+            {
+                return Ok(Responses.AplicationOkMessage("Usuarios encontrados.", users));
+            }
+            else
+            {
+                return BadRequest(Responses.ApplicationErrorMessage("Nenhum usuario encontrado", users));
+            }
+        }
+        catch (DomainException e)
+        {
+            return BadRequest(Responses.DomainErrorMessage(e.Message));
+        }
+        catch (Exception e)
+        {
+            return StatusCode(500, e.Message);
+        }
+    }
+    
+    
+    [HttpGet("{name}")]
+    [Authorize]
+    public async Task<ActionResult> SearchByName(string name)
+    {
+        try
+        {
+            var users = await _userService.SearchByName(name);
+            if (users != null)
+            {
+                return Ok(Responses.AplicationOkMessage("Usuarios encontrados.", users));
+            }
+            else
+            {
+                return BadRequest(Responses.ApplicationErrorMessage("Nenhum usuario encontrado", users));
+            }
+        }
+        catch (DomainException e)
+        {
+            return BadRequest(Responses.DomainErrorMessage(e.Message));
+        }
+        catch (Exception e)
+        {
+            return StatusCode(500, e.Message);
+        }
+    }
 
 }

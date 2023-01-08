@@ -6,7 +6,7 @@ public class UpdateUserViewModel
 {
     
     [Required(ErrorMessage = "A propriedade Id nao pode ser vazia.")]
-    [Range(1 , int.MaxValue, ErrorMessage = "A propriedade Id deve ser maior que 0.")]
+    // [Range(1 , int.MaxValue, ErrorMessage = "A propriedade Id deve ser maior que 0.")]
     public long Id { get; set; }
     
     
